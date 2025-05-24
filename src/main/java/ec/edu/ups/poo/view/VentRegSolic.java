@@ -3,7 +3,7 @@ package ec.edu.ups.poo.view;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.sql.SQLOutput;
+import javax.swing.JOptionPane;
 
 public class VentRegSolic extends Frame implements ActionListener {
 
@@ -35,21 +35,34 @@ public class VentRegSolic extends Frame implements ActionListener {
     public VentRegSolic(Ventana1 ventanaPrincipal) {
         this.ventanaPrincipal = ventanaPrincipal;
         setTitle("Sistema de Gestión de Inventario");
-        setSize(600, 400);
+        setSize(600, 450);
         setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(10, 10));
 
-        // Panel principal
-        panelGeneral = new Panel(new BorderLayout());
+        // Panel principal con borde
+        panelGeneral = new Panel(new BorderLayout(10, 10));
+        panelGeneral.setBackground(Color.WHITE);
+        panelGeneral.setPreferredSize(new Dimension(550, 400));
 
-        // Panel título
-        panelTitulo = new Panel();
+        // Título
+        panelTitulo = new Panel(new FlowLayout(FlowLayout.CENTER));
         labelTitulo = new Label("Registro de Solicitud");
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 28));
         panelTitulo.add(labelTitulo);
 
-        // Panel estado (radio buttons)
-        panelEstado = new Panel(new FlowLayout());
+        // Panel superior (ID + Fecha)
+        Panel panelIDFecha = new Panel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        labelID = new Label("ID:");
+        textFieldID = new TextField(10);
+        labelFecha = new Label("Fecha (dd/mm/aaaa):");
+        textFieldFecha = new TextField(15);
+        panelIDFecha.add(labelID);
+        panelIDFecha.add(textFieldID);
+        panelIDFecha.add(labelFecha);
+        panelIDFecha.add(textFieldFecha);
+
+        // Panel estado
+        panelEstado = new Panel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         estadoGroup = new CheckboxGroup();
         checkboxAprobado = new Checkbox("Aprobado", estadoGroup, false);
         checkboxDesaprobado = new Checkbox("Desaprobado", estadoGroup, false);
@@ -57,64 +70,55 @@ public class VentRegSolic extends Frame implements ActionListener {
         panelEstado.add(checkboxAprobado);
         panelEstado.add(checkboxDesaprobado);
 
-        // Panel fecha
-        panelFecha = new Panel(new FlowLayout(FlowLayout.LEFT));
-        labelFecha = new Label("Fecha (dd/mm/aaaa): ");
-        textFieldFecha = new TextField(15);
-        panelFecha.add(labelFecha);
-        panelFecha.add(textFieldFecha);
-
-        //Panel id
-        panelID = new Panel(new FlowLayout(FlowLayout.LEFT));
-        labelID = new Label("ID: ");
-        textFieldID = new TextField(10); // ¡IMPORTANTE!
-        panelID.add(labelID);
-        panelID.add(textFieldID);
-        // Panel detalles con estilo
-        panelDetalles = new Panel(new BorderLayout());
-        panelDetalles.setBackground(new Color(245, 245, 245)); // Fondo claro
-        panelDetalles.setPreferredSize(new Dimension(400, 150));
-        panelDetalles.setLayout(new BorderLayout());
+        // Panel detalles (con bordes y padding visual)
+        panelDetalles = new Panel(new BorderLayout(10, 10));
+        panelDetalles.setBackground(new Color(245, 245, 245));
+        panelDetalles.setPreferredSize(new Dimension(500, 160));
+        panelDetalles.setLayout(new BorderLayout(10, 10));
 
         labelDetalles = new Label("Detalles:");
         labelDetalles.setFont(new Font("Arial", Font.BOLD, 16));
         labelDetalles.setForeground(Color.DARK_GRAY);
-
         textAreaDetalles = new TextArea(5, 40);
         textAreaDetalles.setFont(new Font("Arial", Font.PLAIN, 14));
         textAreaDetalles.setBackground(Color.WHITE);
         textAreaDetalles.setForeground(Color.BLACK);
-        textAreaDetalles.setPreferredSize(new Dimension(380, 100));
+        textAreaDetalles.setPreferredSize(new Dimension(40, 40));
+        textAreaDetalles.setSize(30,30);
+
 
         panelDetalles.add(labelDetalles, BorderLayout.NORTH);
         panelDetalles.add(textAreaDetalles, BorderLayout.CENTER);
+        panelDetalles.setPreferredSize(new Dimension(500, 150));
+        panelDetalles.setBounds(50, 50, 500, 150);
 
         // Panel botón
         panelBoton = new Panel(new FlowLayout());
         botonGuardar = new Button("GUARDAR");
+        botonGuardar.setFont(new Font("Arial", Font.BOLD, 14));
+        botonGuardar.setBackground(new Color(60, 179, 113));
+        botonGuardar.setForeground(Color.WHITE);
         botonGuardar.addActionListener(this);
         panelBoton.add(botonGuardar);
 
-        //Panel mensaje final
+        // Mensaje (ya no se usa visualmente)
         labelMensajeGuardado = new Label("");
-        labelMensajeGuardado.setForeground(Color.GREEN);
         panelBoton.add(labelMensajeGuardado);
-        // Armar centro
-        Panel panelCentro = new Panel(new BorderLayout());
-        Panel panelCentroArriba = new Panel(new GridLayout(3, 1));
-        panelCentroArriba.add(panelID);
-        panelCentroArriba.add(panelEstado);
-        panelCentroArriba.add(panelFecha);
-        panelCentro.add(panelCentroArriba, BorderLayout.NORTH);
-        panelCentro.add(panelDetalles, BorderLayout.CENTER);
 
-        // Agregar todos los paneles al panel general
+        // Centro
+        Panel panelCentro = new Panel(new BorderLayout(10, 10));
+        panelCentro.add(panelIDFecha, BorderLayout.NORTH);
+        panelCentro.add(panelEstado, BorderLayout.CENTER);
+        panelCentro.add(panelDetalles, BorderLayout.SOUTH);
+
+        // Agregar todo
         panelGeneral.add(panelTitulo, BorderLayout.NORTH);
         panelGeneral.add(panelCentro, BorderLayout.CENTER);
         panelGeneral.add(panelBoton, BorderLayout.SOUTH);
 
         add(panelGeneral);
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -123,12 +127,12 @@ public class VentRegSolic extends Frame implements ActionListener {
             String fecha = textFieldFecha.getText();
             String detalles = textAreaDetalles.getText();
             String id = textFieldID.getText();
-            System.out.println("ID: "+ id);
-            System.out.println("Estado: " + estadoSeleccionado);
-            System.out.println("Fecha: " + fecha);
-            System.out.println("Detalles: " + detalles);
-            labelMensajeGuardado.setText("Solicitud Guardada Con Exito");
-            labelMensajeGuardado.setFont(new Font("Arial", Font.BOLD, 16));
+            JOptionPane.showMessageDialog(this, " Solicitud guardada con éxito",
+                    "Confirmación",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            this.setVisible(false);
+            ventanaPrincipal.setVisible(true);
             botonGuardar.setVisible(false);
         }
     }

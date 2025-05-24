@@ -90,7 +90,7 @@ public class VentRegPro extends Frame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == boton1) {
-            this.setVisible(false);              // Oculta VentRegPro
+            this.setVisible(false);
             ventanaPrincipal.setVisible(true);
         }
     }

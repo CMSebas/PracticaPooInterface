@@ -29,7 +29,7 @@ public class VentRegEmpleado extends Frame implements ActionListener {
         public VentRegEmpleado(Ventana1 ventanaPrincipal) {
             this.ventanaPrincipal = ventanaPrincipal;
             setTitle("Registro De Inventario");
-            setSize(1000, 1000);
+            setSize(600, 400);
             setLocationRelativeTo(null);
 
             panelGeneral = new Panel(new BorderLayout());
