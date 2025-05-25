@@ -1,8 +1,14 @@
 package ec.edu.ups.poo.view;
 
-import java.awt.*;
+import ec.edu.ups.poo.models.Empleado;
 
-public class VentRegEmp extends Frame {
+import javax.swing.JOptionPane;
+import java.awt.*;
+import java.awt.event.*;
+
+public class VentRegEmp extends Frame implements ActionListener {
+
+    private Ventana1 ventanaPrincipal;
     private Panel panelGeneral;
     private Panel panelTitulo;
     private Panel panelLabels;
@@ -23,15 +29,16 @@ public class VentRegEmp extends Frame {
     private TextField textField3;
     private TextField textField4;
 
+    public VentRegEmp(Ventana1 ventanaPrincipal) {
+        this.ventanaPrincipal = ventanaPrincipal;
 
-    public VentRegEmp() {
-        setTitle("Calculadora del Sabado");
-        setSize(600, 250);
+        setTitle("Registro de Empleado");
+        setSize(600, 350);
         setLocationRelativeTo(null);
 
         panelGeneral = new Panel(new BorderLayout());
         panelTitulo = new Panel();
-        panelLabels = new Panel(new GridLayout(2, 4, 10, 0));
+        panelLabels = new Panel(new GridLayout(4, 2, 10, 10));
         panelBoton = new Panel(new FlowLayout());
 
         panelConPadding = new Panel(new FlowLayout(FlowLayout.CENTER, 20, 20));
@@ -40,45 +47,64 @@ public class VentRegEmp extends Frame {
         panelConPadding2 = new Panel(new FlowLayout(FlowLayout.CENTER, 20, 20));
         panelConPadding2.add(panelBoton);
 
-
-        labelNumero1 = new Label("Registro de empleado ");
-
+        labelNumero1 = new Label("Registro de empleado");
         labelNumero1.setFont(new Font("Arial", Font.BOLD, 28));
-
         panelTitulo.add(labelNumero1);
 
-
         labelNumero2 = new Label("Nombre ");
-        labelNumero3 = new Label("Cedula ");
+        labelNumero3 = new Label("Cédula ");
         labelNumero4 = new Label("Cargo ");
         labelNumero5 = new Label("Departamento ");
+
         textField1 = new TextField("", 10);
         textField2 = new TextField("", 10);
         textField3 = new TextField("", 10);
         textField4 = new TextField("", 10);
+
         panelLabels.add(labelNumero2);
-        panelLabels.add(labelNumero3);
-        panelLabels.add(labelNumero4);
-        panelLabels.add(labelNumero5);
         panelLabels.add(textField1);
+        panelLabels.add(labelNumero3);
         panelLabels.add(textField2);
+        panelLabels.add(labelNumero4);
         panelLabels.add(textField3);
+        panelLabels.add(labelNumero5);
         panelLabels.add(textField4);
 
-
-
-
-
-        panelGeneral.add(panelConPadding, BorderLayout.CENTER);
-        panelGeneral.add(panelTitulo, BorderLayout.NORTH);
-        panelGeneral.add(panelConPadding2, BorderLayout.SOUTH);
         boton1 = new Button("GUARDAR");
-
+        boton1.addActionListener(this);
         panelBoton.add(boton1);
+
+        panelGeneral.add(panelTitulo, BorderLayout.NORTH);
+        panelGeneral.add(panelConPadding, BorderLayout.CENTER);
+        panelGeneral.add(panelConPadding2, BorderLayout.SOUTH);
 
         add(panelGeneral);
 
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                ventanaPrincipal.setVisible(true);
+                dispose();
+            }
+        });
+    }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == boton1) {
+            String nombre = textField1.getText();
+            String cedula = textField2.getText();
+            String cargo = textField3.getText();
+            String departamento = textField4.getText();
 
+            Empleado empleado = new Empleado(nombre, cedula, cargo, departamento);
+            ventanaPrincipal.listaEmpleados.add(empleado);
+
+            // Mostrar mensaje de confirmación
+            JOptionPane.showMessageDialog(null, "Empleado guardado con éxito", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+            this.setVisible(false);
+            ventanaPrincipal.setVisible(true);
+            boton1.setVisible(false);
+        }
     }
 }

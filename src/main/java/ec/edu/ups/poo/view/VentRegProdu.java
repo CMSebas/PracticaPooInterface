@@ -1,6 +1,7 @@
 package ec.edu.ups.poo.view;
 
 import java.awt.*;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -52,6 +53,9 @@ public class VentRegProdu extends Frame implements ActionListener, ItemListener 
         panelConPadding.add(panelLabels);
 
         panelConPadding2 = new Panel(new FlowLayout(FlowLayout.CENTER, 20, 20));
+        boton1 = new Button("GUARDAR");
+        boton1.addActionListener(this);
+        panelConPadding2.add(boton1);
 
         labelNumero1 = new Label("Registro de Productos ");
         labelNumero1.setFont(new Font("Arial", Font.BOLD, 28));
@@ -91,6 +95,41 @@ public class VentRegProdu extends Frame implements ActionListener, ItemListener 
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == boton1) {
+            String opcion = comboOpciones.getSelectedItem();
+            String nombre = textField1.getText();
+            String id = textField2.getText();
+
+            if (opcion.equals("SERVICIO PROFESIONAL")) {
+                String cantidadServicios = textField3.getText();
+                String tarifa = textField4.getText();
+                String horas = textField5.getText();
+                String tipo = textField6.getText();
+
+                // Aquí podrías guardar los datos a un objeto si lo deseas
+
+            } else if (opcion.equals("LICENCIA")) {
+                String cantidadLicencias = textField3.getText();
+                String descripcion = textField4.getText();
+                String suscripcion = textField5.getText();
+                String meses = textField6.getText();
+
+            } else if (opcion.equals("PRODUCTO TANGIBLE")) {
+                String cantidad = textField3.getText();
+                String precioUnitario = textField4.getText();
+                String proveedor = textField5.getText();
+                String fechaIngreso = textField6.getText();
+            }
+
+            JOptionPane.showMessageDialog(this,
+                    "Producto guardado con éxito",
+                    "Confirmación",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            this.setVisible(false);
+            ventanaPrincipal.setVisible(true);
+            boton1.setVisible(false);
+        }
     }
 
     @Override

@@ -1,12 +1,21 @@
 package ec.edu.ups.poo.view;
 
 import ec.edu.ups.poo.controller.Ventana1Controller;
-
+import ec.edu.ups.poo.models.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Ventana1 extends Frame implements ActionListener {
+
+    public ArrayList<Proveedor> listaProveedores = new ArrayList<>();
+    public ArrayList<Producto> listaProductos = new ArrayList<>();
+    public ArrayList<Solicitud> listaSolicitudes = new ArrayList<>();
+    public ArrayList<Empleado> listaEmpleados = new ArrayList<>();
+
+
     private Panel panelGeneral;
     private Panel panelTitulo;
     private Panel panelBotones;
@@ -22,13 +31,13 @@ public class Ventana1 extends Frame implements ActionListener {
     private Button boton6;
     private Button boton7;
     private Button boton8;
+    private Button boton9;
+    private Button boton10;
 
     public Ventana1() {
         setTitle("Sistema de Gestion de Inventario");
         setSize(500, 300);
         setLocationRelativeTo(null);
-
-
 
 
         panelGeneral = new Panel(new BorderLayout());
@@ -52,7 +61,9 @@ public class Ventana1 extends Frame implements ActionListener {
         boton5 = new Button("REGISTRAR SOLICITUD");
         boton6 = new Button("VER SOLICITUD");
         boton7 = new Button("REGISTRAR EMPLEADO");
-        boton8 = new Button("SALIR");
+        boton8 = new Button("BUSCAR PROVEDORES POR ID");
+        boton9 = new Button("BUSCAR PRODUCTOS POR ID");
+        boton10 = new Button("SALIR");
 
 
 
@@ -64,25 +75,18 @@ public class Ventana1 extends Frame implements ActionListener {
         panelBotones.add(boton6);
         panelBotones.add(boton7);
         panelBotones.add(boton8);
+        panelBotones.add(boton9);
+        panelBotones.add(boton10);
 
         boton2.addActionListener(this);
         boton8.addActionListener(this);
         boton4.addActionListener(this);
         boton5.addActionListener(this);
         boton7.addActionListener(this);
-
-
-
-
-
-
-
+        boton9.addActionListener(this);
+        boton10.addActionListener(this);
 
         add(panelGeneral);
-
-
-
-
 
     }
 
@@ -96,7 +100,7 @@ public class Ventana1 extends Frame implements ActionListener {
             ventanaPro.setVisible(true);
             this.setVisible(false);
         }
-        else if(e.getSource() == boton8) {
+        else if(e.getSource() == boton10) {
             System.exit(0);
         }
         else if(e.getSource() == boton4) {
@@ -113,17 +117,32 @@ public class Ventana1 extends Frame implements ActionListener {
             this.setVisible(false);
         }
         else if(e.getSource() == boton7){
-            VentRegEmpleado ventRegEmp = new VentRegEmpleado(this);
+            VentRegEmp ventRegEmp = new VentRegEmp(this);
             ventRegEmp.addWindowListener(new Ventana1Controller());
             ventRegEmp.setVisible(true);
             this.setVisible(false);
 
         }
+        else if(e.getSource() == boton9) {
+            BuscarProductoID buscarProductoID = new BuscarProductoID(this);
+            buscarProductoID.addWindowListener(new Ventana1Controller());
+            buscarProductoID.setVisible(true);
+            this.setVisible(false);
+        }
+        else if(e.getSource() == boton8) {
+            BuscarProvedoID buscarProvedoID = new BuscarProvedoID(this);
+            buscarProvedoID.addWindowListener(new Ventana1Controller());
+            buscarProvedoID.setVisible(true);
+            this.setVisible(false);
+        }
 
         }
 
-
+    public ArrayList<Proveedor> getListaProveedores() {
+        return listaProveedores;
 
     }
-
-
+    public ArrayList<Producto> getListaProductos() {
+        return listaProductos;
+    }
+}

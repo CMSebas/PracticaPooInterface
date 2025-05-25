@@ -1,10 +1,13 @@
 package ec.edu.ups.poo.view;
 
+import ec.edu.ups.poo.models.Proveedor;
+
+import javax.swing.JOptionPane;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class VentRegPro extends Frame implements ActionListener {
+
     private Ventana1 ventanaPrincipal;
     private Panel panelGeneral;
     private Panel panelTitulo;
@@ -13,23 +16,24 @@ public class VentRegPro extends Frame implements ActionListener {
     private Panel panelConPadding2;
     private Panel panelBoton;
 
-    private Label labelNumero1;
+    private Label labelTitulo;
 
-    private Button boton1;
+    private Button botonGuardar;
 
-    private Label labelNumero2;
-    private Label labelNumero3;
-    private Label labelNumero4;
-    private Label labelNumero5;
-    private TextField textField1;
-    private TextField textField2;
-    private TextField textField3;
-    private TextField textField4;
+    private Label labelNombre;
+    private Label labelCedula;
+    private Label labelEmpresa;
+    private Label labelRuc;
 
+    private TextField textFieldNombre;
+    private TextField textFieldCedula;
+    private TextField textFieldEmpresa;
+    private TextField textFieldRuc;
 
     public VentRegPro(Ventana1 ventanaPrincipal) {
         this.ventanaPrincipal = ventanaPrincipal;
-        setTitle("Calculadora del Sabado");
+
+        setTitle("Registro de Proveedor");
         setSize(600, 250);
         setLocationRelativeTo(null);
 
@@ -44,54 +48,64 @@ public class VentRegPro extends Frame implements ActionListener {
         panelConPadding2 = new Panel(new FlowLayout(FlowLayout.CENTER, 20, 20));
         panelConPadding2.add(panelBoton);
 
+        labelTitulo = new Label("Registro de Proveedor");
+        labelTitulo.setFont(new Font("Arial", Font.BOLD, 28));
+        panelTitulo.add(labelTitulo);
 
-        labelNumero1 = new Label("Registro de provedor ");
+        labelNombre = new Label("Nombre ");
+        labelCedula = new Label("Cédula ");
+        labelEmpresa = new Label("Nombre de empresa ");
+        labelRuc = new Label("RUC ");
 
-        labelNumero1.setFont(new Font("Arial", Font.BOLD, 28));
+        textFieldNombre = new TextField("", 10);
+        textFieldCedula = new TextField("", 10);
+        textFieldEmpresa = new TextField("", 10);
+        textFieldRuc = new TextField("", 10);
 
-        panelTitulo.add(labelNumero1);
+        panelLabels.add(labelNombre);
+        panelLabels.add(textFieldNombre);
+        panelLabels.add(labelCedula);
+        panelLabels.add(textFieldCedula);
+        panelLabels.add(labelEmpresa);
+        panelLabels.add(textFieldEmpresa);
+        panelLabels.add(labelRuc);
+        panelLabels.add(textFieldRuc);
 
+        botonGuardar = new Button("GUARDAR");
+        botonGuardar.addActionListener(this);
+        panelBoton.add(botonGuardar);
 
-        labelNumero2 = new Label("Nombre ");
-        labelNumero3 = new Label("Cedula ");
-        labelNumero4 = new Label("Nombre de empresa ");
-        labelNumero5 = new Label("Ruc ");
-        textField1 = new TextField("", 10);
-        textField2 = new TextField("", 10);
-        textField3 = new TextField("", 10);
-        textField4 = new TextField("", 10);
-        panelLabels.add(labelNumero2);
-        panelLabels.add(labelNumero3);
-        panelLabels.add(labelNumero4);
-        panelLabels.add(labelNumero5);
-        panelLabels.add(textField1);
-        panelLabels.add(textField2);
-        panelLabels.add(textField3);
-        panelLabels.add(textField4);
-
-
-
-
-
-        panelGeneral.add(panelConPadding, BorderLayout.CENTER);
         panelGeneral.add(panelTitulo, BorderLayout.NORTH);
+        panelGeneral.add(panelConPadding, BorderLayout.CENTER);
         panelGeneral.add(panelConPadding2, BorderLayout.SOUTH);
-        boton1 = new Button("GUARDAR");
-        boton1.addActionListener(this);
-
-        panelBoton.add(boton1);
 
         add(panelGeneral);
 
-
-
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                ventanaPrincipal.setVisible(true);
+                dispose();
+            }
+        });
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == boton1) {
+        if (e.getSource() == botonGuardar) {
+            String nombre = textFieldNombre.getText();
+            String cedula = textFieldCedula.getText();
+            String empresa = textFieldEmpresa.getText();
+            String ruc = textFieldRuc.getText();
+
+            Proveedor proveedor  = new Proveedor(nombre, cedula, empresa, ruc);
+            ventanaPrincipal.listaProveedores.add(proveedor);
+
+            JOptionPane.showMessageDialog(this, "Proveedor guardado con éxito", "Confirmación", JOptionPane.INFORMATION_MESSAGE);
+
             this.setVisible(false);
             ventanaPrincipal.setVisible(true);
+            botonGuardar.setVisible(false);
         }
     }
 }
