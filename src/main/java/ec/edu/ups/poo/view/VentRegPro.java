@@ -73,7 +73,7 @@ public class VentRegPro extends Frame implements ActionListener {
 
         labelNumero2 = new Label("Nombre ");
         labelNumero3 = new Label("ID ");
-        labelNumero4 = new Label("Nombre de empresa ");
+        labelNumero4 = new Label("Razon Social ");
         labelNumero5 = new Label("Ruc ");
         textField1 = new TextField("", 10);
         textField2 = new TextField("", 10);
