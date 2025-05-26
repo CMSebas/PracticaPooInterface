@@ -15,6 +15,8 @@ public class VentRegSolic extends Frame implements ActionListener {
     private Panel panelDetalles;
     private Panel panelID;
     private Panel panelBoton;
+    private Panel panelNorte;
+    private Panel panelSoli;
 
     private Label labelTitulo;
     private Label labelFecha;
@@ -35,7 +37,7 @@ public class VentRegSolic extends Frame implements ActionListener {
     public VentRegSolic(Ventana1 ventanaPrincipal) {
         this.ventanaPrincipal = ventanaPrincipal;
         setTitle("Sistema de Gestión de Inventario");
-        setSize(600, 400);
+        setSize(625, 300);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
@@ -48,6 +50,21 @@ public class VentRegSolic extends Frame implements ActionListener {
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 28));
         panelTitulo.add(labelTitulo);
 
+        // Panel fecha
+        panelSoli = new Panel();
+        panelSoli.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelNorte= new Panel(new FlowLayout());
+        labelID = new Label("ID: ");
+        textFieldID = new TextField(10); // ¡IMPORTANTE!
+        labelFecha = new Label("Fecha (dd/mm/aaaa): ");
+        textFieldFecha = new TextField(15);
+        panelNorte.add(labelID);
+        panelNorte.add(textFieldID);
+        panelNorte.add(labelFecha);
+        panelNorte.add(textFieldFecha);
+
+        //Panel id
+
         // Panel estado (radio buttons)
         panelEstado = new Panel(new FlowLayout());
         estadoGroup = new CheckboxGroup();
@@ -57,19 +74,8 @@ public class VentRegSolic extends Frame implements ActionListener {
         panelEstado.add(checkboxAprobado);
         panelEstado.add(checkboxDesaprobado);
 
-        // Panel fecha
-        panelFecha = new Panel(new FlowLayout(FlowLayout.LEFT));
-        labelFecha = new Label("Fecha (dd/mm/aaaa): ");
-        textFieldFecha = new TextField(15);
-        panelFecha.add(labelFecha);
-        panelFecha.add(textFieldFecha);
 
-        //Panel id
-        panelID = new Panel(new FlowLayout(FlowLayout.LEFT));
-        labelID = new Label("ID: ");
-        textFieldID = new TextField(10); // ¡IMPORTANTE!
-        panelID.add(labelID);
-        panelID.add(textFieldID);
+
         // Panel detalles con estilo
         panelDetalles = new Panel(new BorderLayout());
         panelDetalles.setBackground(new Color(245, 245, 245)); // Fondo claro
@@ -84,7 +90,7 @@ public class VentRegSolic extends Frame implements ActionListener {
         textAreaDetalles.setFont(new Font("Arial", Font.PLAIN, 14));
         textAreaDetalles.setBackground(Color.WHITE);
         textAreaDetalles.setForeground(Color.BLACK);
-        textAreaDetalles.setPreferredSize(new Dimension(380, 100));
+
 
         panelDetalles.add(labelDetalles, BorderLayout.NORTH);
         panelDetalles.add(textAreaDetalles, BorderLayout.CENTER);
@@ -100,18 +106,19 @@ public class VentRegSolic extends Frame implements ActionListener {
         labelMensajeGuardado.setForeground(Color.GREEN);
         panelBoton.add(labelMensajeGuardado);
         // Armar centro
-        Panel panelCentro = new Panel(new BorderLayout());
-        Panel panelCentroArriba = new Panel(new GridLayout(3, 1));
-        panelCentroArriba.add(panelID);
-        panelCentroArriba.add(panelEstado);
-        panelCentroArriba.add(panelFecha);
-        panelCentro.add(panelCentroArriba, BorderLayout.NORTH);
-        panelCentro.add(panelDetalles, BorderLayout.CENTER);
+        panelNorte.setPreferredSize(new Dimension(550, 40));     // Panel ID y Fecha
+        panelEstado.setPreferredSize(new Dimension(550, 30));    // Estado con menos altura
+        panelDetalles.setPreferredSize(new Dimension(550, 120)); // Detalles más grande
 
-        // Agregar todos los paneles al panel general
+        panelSoli.add(panelNorte);
+        panelSoli.add(panelEstado);
+        panelSoli.add(panelDetalles);
+
         panelGeneral.add(panelTitulo, BorderLayout.NORTH);
-        panelGeneral.add(panelCentro, BorderLayout.CENTER);
+        panelGeneral.add(panelSoli, BorderLayout.CENTER);
         panelGeneral.add(panelBoton, BorderLayout.SOUTH);
+
+
 
         add(panelGeneral);
     }
