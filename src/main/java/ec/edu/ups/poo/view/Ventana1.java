@@ -85,6 +85,9 @@ public class Ventana1 extends Frame implements ActionListener {
         boton7.addActionListener(this);
         boton9.addActionListener(this);
         boton10.addActionListener(this);
+        boton1.addActionListener(this);
+        boton3.addActionListener(this);
+        boton6.addActionListener(this);
 
         add(panelGeneral);
 
@@ -134,9 +137,22 @@ public class Ventana1 extends Frame implements ActionListener {
             buscarProvedoID.addWindowListener(new Ventana1Controller());
             buscarProvedoID.setVisible(true);
             this.setVisible(false);
+        }else if (e.getSource() == boton1) {
+            VerListaProveedores verListaProveedores = new VerListaProveedores(this);
+            verListaProveedores.setVisible(true);
+            this.setVisible(false);
+        } else if (e.getSource() == boton3) {
+            VerListaProductos verListaProductos = new VerListaProductos(this);
+            verListaProductos.setVisible(true);
+            this.setVisible(false);
+        } else if (e.getSource() == boton6) {
+            VerListaSolicitudes verListaSolicitudes = new VerListaSolicitudes(this);
+            verListaSolicitudes.setVisible(true);
+            this.setVisible(false);
         }
 
-        }
+
+    }
 
     public ArrayList<Proveedor> getListaProveedores() {
         return listaProveedores;
@@ -144,5 +160,8 @@ public class Ventana1 extends Frame implements ActionListener {
     }
     public ArrayList<Producto> getListaProductos() {
         return listaProductos;
+    }
+    public List<Solicitud> getListaSolicitudes() {
+        return listaSolicitudes;
     }
 }
