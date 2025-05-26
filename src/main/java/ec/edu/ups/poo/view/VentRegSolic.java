@@ -1,135 +1,166 @@
 package ec.edu.ups.poo.view;
 
+import ec.edu.ups.poo.controllers.Controller;
+import ec.edu.ups.poo.enums.EstadoSolicitud;
+import ec.edu.ups.poo.models.Departamento;
+import ec.edu.ups.poo.models.Empleado;
+import ec.edu.ups.poo.models.Producto;
+import ec.edu.ups.poo.enums.Cargo;
+import ec.edu.ups.poo.models.SolicitudCompra;
+
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.sql.SQLOutput;
+import java.awt.event.ActionListener;
 
 public class VentRegSolic extends Frame implements ActionListener {
-
     private Ventana1 ventanaPrincipal;
+    private Controller controller;
+    private Label labelCargo;
+    private Choice choiceCargo;
+
     private Panel panelGeneral;
     private Panel panelTitulo;
     private Panel panelEstado;
-    private Panel panelFecha;
-    private Panel panelDetalles;
-    private Panel panelID;
+    private Panel panelObservaciones;
+    private Panel panelSuperior;
     private Panel panelBoton;
 
     private Label labelTitulo;
-    private Label labelFecha;
-    private Label labelDetalles;
-    private Label labelID;
-    private Label labelMensajeGuardado;
+    private Label labelDepartamento;
+    private Label labelObservaciones;
+    private Label labelIDEmpleado;
 
-    private TextField textFieldFecha;
-    private TextArea textAreaDetalles;
-    private TextField textFieldID;
+    private Label labelIDProducto;
+    private TextField textFieldDepartamento;
+    private TextArea textAreaObservaciones;
+    private TextField textFieldIDEmpleado;
+
+    private TextField textFieldIDProducto;
 
     private CheckboxGroup estadoGroup;
     private Checkbox checkboxAprobado;
     private Checkbox checkboxDesaprobado;
-
+    private Checkbox checkboxEnEspera;
+    private Panel centro;
     private Button botonGuardar;
 
-    public VentRegSolic(Ventana1 ventanaPrincipal) {
+    public VentRegSolic(Ventana1 ventanaPrincipal, Controller controller) {
         this.ventanaPrincipal = ventanaPrincipal;
-        setTitle("Sistema de Gestión de Inventario");
-        setSize(600, 400);
+        this.controller = controller;
+        setTitle("Registro de Solicitud");
+        setSize(600, 350);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-
-        // Panel principal
-        panelGeneral = new Panel(new BorderLayout());
-
-        // Panel título
         panelTitulo = new Panel();
         labelTitulo = new Label("Registro de Solicitud");
-        labelTitulo.setFont(new Font("Arial", Font.BOLD, 28));
-        panelTitulo.add(labelTitulo);
+        labelTitulo.setFont(new Font("Arial", Font.BOLD, 26));
 
-        // Panel estado (radio buttons)
-        panelEstado = new Panel(new FlowLayout());
+        panelTitulo.add(labelTitulo);
+        panelSuperior = new Panel(new FlowLayout(FlowLayout.LEFT));
+        labelIDEmpleado = new Label("ID Empleado:");
+        textFieldIDEmpleado = new TextField(6);
+
+        labelDepartamento = new Label("Departamento:");
+        textFieldDepartamento = new TextField(12);
+        labelIDProducto = new Label("ID Producto:");
+        textFieldIDProducto = new TextField(6);
+        labelCargo = new Label("Cargo:");
+
+        choiceCargo = new Choice();
+
+        choiceCargo.add("SECRETARIO");
+        choiceCargo.add("ASISTENTE");
+        choiceCargo.add("JEFE");
+
+        panelSuperior.add(labelIDEmpleado);
+        panelSuperior.add(textFieldIDEmpleado);
+        panelSuperior.add(labelDepartamento);
+        panelSuperior.add(textFieldDepartamento);
+
+        panelSuperior.add(labelCargo);
+        panelSuperior.add(choiceCargo);
+        panelSuperior.add(labelIDProducto);
+        panelSuperior.add(textFieldIDProducto);
+
+        panelEstado = new Panel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         estadoGroup = new CheckboxGroup();
+
         checkboxAprobado = new Checkbox("Aprobado", estadoGroup, false);
         checkboxDesaprobado = new Checkbox("Desaprobado", estadoGroup, false);
-        panelEstado.add(new Label("Estado: "));
+        checkboxEnEspera = new Checkbox("En espera", estadoGroup, false);
+        panelEstado.add(new Label("Estado:"));
+
         panelEstado.add(checkboxAprobado);
         panelEstado.add(checkboxDesaprobado);
+        panelEstado.add(checkboxEnEspera);
 
-        // Panel fecha
-        panelFecha = new Panel(new FlowLayout(FlowLayout.LEFT));
-        labelFecha = new Label("Fecha (dd/mm/aaaa): ");
-        textFieldFecha = new TextField(15);
-        panelFecha.add(labelFecha);
-        panelFecha.add(textFieldFecha);
-
-        //Panel id
-        panelID = new Panel(new FlowLayout(FlowLayout.LEFT));
-        labelID = new Label("ID: ");
-        textFieldID = new TextField(10); // ¡IMPORTANTE!
-        panelID.add(labelID);
-        panelID.add(textFieldID);
-        // Panel detalles con estilo
-        panelDetalles = new Panel(new BorderLayout());
-        panelDetalles.setBackground(new Color(245, 245, 245)); // Fondo claro
-        panelDetalles.setPreferredSize(new Dimension(400, 150));
-        panelDetalles.setLayout(new BorderLayout());
-
-        labelDetalles = new Label("Detalles:");
-        labelDetalles.setFont(new Font("Arial", Font.BOLD, 16));
-        labelDetalles.setForeground(Color.DARK_GRAY);
-
-        textAreaDetalles = new TextArea(5, 40);
-        textAreaDetalles.setFont(new Font("Arial", Font.PLAIN, 14));
-        textAreaDetalles.setBackground(Color.WHITE);
-        textAreaDetalles.setForeground(Color.BLACK);
-        textAreaDetalles.setPreferredSize(new Dimension(380, 100));
-
-        panelDetalles.add(labelDetalles, BorderLayout.NORTH);
-        panelDetalles.add(textAreaDetalles, BorderLayout.CENTER);
-
-        // Panel botón
+        panelObservaciones = new Panel(new BorderLayout());
+        labelObservaciones = new Label("Observaciones:");
+        textAreaObservaciones = new TextArea(4, 40);
+        panelObservaciones.add(labelObservaciones, BorderLayout.NORTH);
+        panelObservaciones.add(textAreaObservaciones, BorderLayout.CENTER);
         panelBoton = new Panel(new FlowLayout());
+
         botonGuardar = new Button("GUARDAR");
         botonGuardar.addActionListener(this);
         panelBoton.add(botonGuardar);
 
-        //Panel mensaje final
-        labelMensajeGuardado = new Label("");
-        labelMensajeGuardado.setForeground(Color.GREEN);
-        panelBoton.add(labelMensajeGuardado);
-        // Armar centro
-        Panel panelCentro = new Panel(new BorderLayout());
-        Panel panelCentroArriba = new Panel(new GridLayout(3, 1));
-        panelCentroArriba.add(panelID);
-        panelCentroArriba.add(panelEstado);
-        panelCentroArriba.add(panelFecha);
-        panelCentro.add(panelCentroArriba, BorderLayout.NORTH);
-        panelCentro.add(panelDetalles, BorderLayout.CENTER);
-
-        // Agregar todos los paneles al panel general
+        centro = new Panel(new GridLayout(3, 1, 5, 0));
+        centro.add(panelSuperior);
+        centro.add(panelEstado);
+        centro.add(panelObservaciones);
+        panelGeneral = new Panel(new BorderLayout());
         panelGeneral.add(panelTitulo, BorderLayout.NORTH);
-        panelGeneral.add(panelCentro, BorderLayout.CENTER);
+        panelGeneral.add(centro, BorderLayout.CENTER);
         panelGeneral.add(panelBoton, BorderLayout.SOUTH);
-
         add(panelGeneral);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == botonGuardar) {
-            String estadoSeleccionado = estadoGroup.getSelectedCheckbox().getLabel();
-            String fecha = textFieldFecha.getText();
-            String detalles = textAreaDetalles.getText();
-            String id = textFieldID.getText();
-            System.out.println("ID: "+ id);
-            System.out.println("Estado: " + estadoSeleccionado);
-            System.out.println("Fecha: " + fecha);
-            System.out.println("Detalles: " + detalles);
-            labelMensajeGuardado.setText("Solicitud Guardada Con Exito");
-            labelMensajeGuardado.setFont(new Font("Arial", Font.BOLD, 16));
-            botonGuardar.setVisible(false);
+            int idEmpleado = Integer.parseInt(textFieldIDEmpleado.getText().trim());
+            int idProducto = Integer.parseInt(textFieldIDProducto.getText().trim());
+
+            String departamento = textFieldDepartamento.getText().trim();
+            String observaciones = textAreaObservaciones.getText().trim();
+            String estado = estadoGroup.getSelectedCheckbox().getLabel();
+
+            Cargo cargo = Cargo.valueOf(choiceCargo.getSelectedItem());
+            Departamento dpto = new Departamento(departamento);
+            Empleado empleado = new Empleado(idEmpleado, "Empleado demo", cargo, dpto);
+            SolicitudCompra solicitud = new SolicitudCompra(empleado);
+            Producto producto = null;
+            for (Producto p : controller.getProductos()) {
+                if (p.getId() == idProducto) {
+                    producto = p;
+                    break;
+                }
+            }
+            if (producto == null) {
+                JOptionPane.showMessageDialog(this, "Producto no encontrado");
+                return;
+            }
+            solicitud.agregarDetalle(producto, observaciones);
+            switch (estado) {
+                case "Aprobado":
+                    solicitud.setEstadoSolicitud(EstadoSolicitud.APROBADA);
+                    break;
+                case "Desaprobado":
+                    solicitud.setEstadoSolicitud(EstadoSolicitud.RECHAZADA);
+                    break;
+                case "En espera":
+                    solicitud.setEstadoSolicitud(EstadoSolicitud.EN_REVISION);
+                    break;
+            }
+            controller.getSolicitudes().add(solicitud);
+            System.out.println("----- SOLICITUD GUARDADA -----");
+            System.out.println(solicitud);
+            System.out.println("------------------------------");
+            JOptionPane.showMessageDialog(this, "Agregado");
+            this.setVisible(false);
+            ventanaPrincipal.setVisible(true);
         }
     }
 }

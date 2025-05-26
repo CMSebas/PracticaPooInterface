@@ -66,9 +66,6 @@ public class VentRegEmp extends Frame {
         panelLabels.add(textField4);
 
 
-
-
-
         panelGeneral.add(panelConPadding, BorderLayout.CENTER);
         panelGeneral.add(panelTitulo, BorderLayout.NORTH);
         panelGeneral.add(panelConPadding2, BorderLayout.SOUTH);
@@ -77,7 +74,6 @@ public class VentRegEmp extends Frame {
         panelBoton.add(boton1);
 
         add(panelGeneral);
-
 
 
     }

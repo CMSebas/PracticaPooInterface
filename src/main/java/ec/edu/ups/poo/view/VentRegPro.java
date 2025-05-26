@@ -1,11 +1,22 @@
 package ec.edu.ups.poo.view;
 
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import ec.edu.ups.poo.controllers.Controller;
+import ec.edu.ups.poo.controllers.Ventana1Controller;
+import ec.edu.ups.poo.models.Producto;
+import ec.edu.ups.poo.models.Proveedor;
+
+import javax.swing.*;
 
 public class VentRegPro extends Frame implements ActionListener {
     private Ventana1 ventanaPrincipal;
+    private Controller controller;
     private Panel panelGeneral;
     private Panel panelTitulo;
     private Panel panelLabels;
@@ -25,10 +36,18 @@ public class VentRegPro extends Frame implements ActionListener {
     private TextField textField2;
     private TextField textField3;
     private TextField textField4;
+    private Producto productoAsociado;
 
 
-    public VentRegPro(Ventana1 ventanaPrincipal) {
+    public void setProductoAsociado(Producto productoAsociado) {
+        this.productoAsociado = productoAsociado;
+    }
+
+
+    public VentRegPro(Ventana1 ventanaPrincipal,Controller controller) {
         this.ventanaPrincipal = ventanaPrincipal;
+        this.controller = controller;
+        this.productoAsociado = productoAsociado;
         setTitle("Calculadora del Sabado");
         setSize(600, 250);
         setLocationRelativeTo(null);
@@ -53,7 +72,7 @@ public class VentRegPro extends Frame implements ActionListener {
 
 
         labelNumero2 = new Label("Nombre ");
-        labelNumero3 = new Label("Cedula ");
+        labelNumero3 = new Label("ID ");
         labelNumero4 = new Label("Nombre de empresa ");
         labelNumero5 = new Label("Ruc ");
         textField1 = new TextField("", 10);
@@ -82,16 +101,61 @@ public class VentRegPro extends Frame implements ActionListener {
         panelBoton.add(boton1);
 
         add(panelGeneral);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                ventanaPrincipal.setVisible(true);
+                dispose();
+            }
+        });
 
 
 
     }
+
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == boton1) {
-            this.setVisible(false);              // Oculta VentRegPro
+            String nombre = textField1.getText();
+            int id = Integer.parseInt(textField2.getText());
+            String empresa = textField3.getText();
+            String ruc = textField4.getText();
+
+            Proveedor proveedor = new Proveedor(id, nombre, ruc, empresa);
+            if (productoAsociado != null) {
+                productoAsociado.agregarProveedor(proveedor);
+                controller.agregarProductoDesdeGUI(productoAsociado);
+            }
+            controller.agregarProveedor(proveedor);
+
+            JOptionPane.showMessageDialog(null, "Datos guardados exitosamente.");
+
+            
+            textField1.setText("");
+            textField2.setText("");
+            textField3.setText("");
+            textField4.setText("");
+            this.setVisible(false);
             ventanaPrincipal.setVisible(true);
         }
     }
+
+    private void showDialog(String mensaje) {
+        Dialog dialog = new Dialog(this, "Mensaje", true);
+        dialog.setLayout(new FlowLayout());
+        dialog.add(new Label(mensaje));
+        Button ok = new Button("OK");
+        ok.addActionListener(ev -> dialog.setVisible(false));
+        dialog.add(ok);
+        dialog.setSize(300, 150);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
 }
+
+
+
+
+
